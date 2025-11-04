@@ -13,6 +13,11 @@ A Spring Boot-based Retrieval-Augmented Generation (RAG) chatbot application usi
 
 **Note**: To use `gemma3:4b`, your system need at least 8GB RAM and a GPU with at least 4GB of VRAM, such as GTX 1650 4GB or better.
 
+**Alternative AI Providers**: This project supports other AI providers through different branches:
+
+- **OpenAI API**: Check out the `open-ai` branch to use OpenAI's GPT models and embeddings
+- **Google Gemini API**: Check out the `gemini` branch to use Google Gemini models and embeddings
+
 ## Project Structure
 
 ```
