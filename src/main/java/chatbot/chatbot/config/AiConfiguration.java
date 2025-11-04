@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import dev.langchain4j.model.embedding.DimensionAwareEmbeddingModel;
-import dev.langchain4j.model.ollama.OllamaEmbeddingModel;
-import dev.langchain4j.model.ollama.OllamaStreamingChatModel;
+import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
+import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 import dev.langchain4j.store.embedding.pgvector.PgVectorEmbeddingStore;
 
 @Configuration
@@ -20,6 +19,12 @@ public class AiConfiguration {
     
     @Value("${app.ai.embedding-model-name}")
     private String embeddingModelName;
+
+    @Value("#{new Integer(${app.ai.embedding-dimension})}")
+    private Integer dimension;
+
+    @Value("${app.ai.api-key}")
+    private String apiKey; 
 
     @Value("${app.database.host}")
     private String dbHost;
@@ -46,32 +51,33 @@ public class AiConfiguration {
     private String rawDataDir;
 
     @Bean
-    public OllamaStreamingChatModel chatModel() {
-        return OllamaStreamingChatModel.builder()
-            .baseUrl(serverUrl)
+    public OpenAiStreamingChatModel chatModel() {
+        return OpenAiStreamingChatModel.builder()
             .modelName(chatModelName)
+            .apiKey(apiKey)
             .build();
     }
 
     @Bean
-    public DimensionAwareEmbeddingModel embeddingModel() {
-        return OllamaEmbeddingModel.builder()
-            .baseUrl(serverUrl)
+    public OpenAiEmbeddingModel embeddingModel() {
+        return OpenAiEmbeddingModel.builder()
             .modelName(embeddingModelName)
+            .dimensions(dimension)
+            .apiKey(apiKey)
             .build();
     }
 
     @Bean
-    public PgVectorEmbeddingStore embeddingStore(DimensionAwareEmbeddingModel embeddingModel) {
+    public PgVectorEmbeddingStore embeddingStore(OpenAiEmbeddingModel embeddingModel) {
         return PgVectorEmbeddingStore.builder()
             .host(dbHost)
             .port(dbPort)
             .user(dbUser)
             .password(dbPassword)
             .database(dbName)
-            .createTable(false)
+            .createTable(true)
             .table(tableName)
-            .dimension(embeddingModel.dimension())
+            .dimension(dimension)
             .build();
     }
 }

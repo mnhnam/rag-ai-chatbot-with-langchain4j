@@ -10,21 +10,21 @@ import chatbot.chatbot.prompttemplate.RagPromptTemplate;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.embedding.DimensionAwareEmbeddingModel;
-import dev.langchain4j.model.ollama.OllamaStreamingChatModel;
+import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
+import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
 
 @Service
 public class AiService {
 
-    private final OllamaStreamingChatModel chatModel;
-    private final DimensionAwareEmbeddingModel embeddingModel;
+    private final OpenAiStreamingChatModel chatModel;
+    private final OpenAiEmbeddingModel embeddingModel;
 
-    public AiService(OllamaStreamingChatModel chatModel, DimensionAwareEmbeddingModel embeddingModel) {
+    public AiService(OpenAiStreamingChatModel chatModel, OpenAiEmbeddingModel embeddingModel) {
         this.chatModel = chatModel;
         this.embeddingModel = embeddingModel;
     }
 
-    public DimensionAwareEmbeddingModel getEmbeddingModel() {
+    public OpenAiEmbeddingModel getEmbeddingModel() {
         return embeddingModel;
     }
 
