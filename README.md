@@ -11,6 +11,8 @@ A Spring Boot-based Retrieval-Augmented Generation (RAG) chatbot application usi
   - Gemma 3 4B model (`gemma3:4b`)
   - Nomic Embed Text model (`nomic-embed-text:latest`)
 
+**Note**: To use `gemma3:4b`, your system need at least 8GB RAM and a GPU with at least 4GB of VRAM, such as GTX 1650 4GB or better.
+
 ## Project Structure
 
 ```
@@ -159,6 +161,26 @@ app.ai.server-url=
 app.ai.chat-model-name=gemma3:4b
 app.ai.embedding-model-name=nomic-embed-text:latest
 ```
+
+### Customizing LLM and Embedding Models
+
+You can change the language model and embedding model by modifying the `app.ai.chat-model-name` and `app.ai.embedding-model-name` properties in the configuration file.
+
+**Available models** can be found on the [Ollama Library](https://ollama.com/library).
+
+⚠️ **Important**: Different models have different system requirements. Larger models consume significantly more RAM and disk space, and running them can be computationally expensive:
+
+- **Smaller models** (2B-4B parameters) - Suitable for most systems with 8GB+ RAM
+- **Medium models** (7B-13B parameters) - Require 16GB+ RAM and are more resource-intensive
+- **Large models** (20B+ parameters) - Require 32GB+ RAM and specialized hardware (GPU recommended)
+
+**Before switching to a different model**, ensure your system has adequate:
+
+- **RAM** - The model needs to be loaded into memory during inference
+- **Disk Space** - For storing the model files (check Ollama library for model sizes)
+- **GPU** (optional) - Recommended for better performance, especially for larger models
+
+Refer to the [Ollama documentation](https://docs.ollama.com/) for detailed system requirements and model comparisons.
 
 ## Technologies Used
 
