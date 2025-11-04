@@ -10,21 +10,21 @@ import chatbot.chatbot.prompttemplate.RagPromptTemplate;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.SystemMessage;
 import dev.langchain4j.data.message.UserMessage;
-import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
-import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
+import dev.langchain4j.model.googleai.GoogleAiEmbeddingModel;
+import dev.langchain4j.model.googleai.GoogleAiGeminiStreamingChatModel;
 
 @Service
 public class AiService {
 
-    private final OpenAiStreamingChatModel chatModel;
-    private final OpenAiEmbeddingModel embeddingModel;
+    private final GoogleAiGeminiStreamingChatModel chatModel;
+    private final GoogleAiEmbeddingModel embeddingModel;
 
-    public AiService(OpenAiStreamingChatModel chatModel, OpenAiEmbeddingModel embeddingModel) {
+    public AiService(GoogleAiGeminiStreamingChatModel chatModel, GoogleAiEmbeddingModel embeddingModel) {
         this.chatModel = chatModel;
         this.embeddingModel = embeddingModel;
     }
 
-    public OpenAiEmbeddingModel getEmbeddingModel() {
+    public GoogleAiEmbeddingModel getEmbeddingModel() {
         return embeddingModel;
     }
 

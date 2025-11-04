@@ -1,15 +1,15 @@
 # RAG AI Chatbot with LangChain4j
 
-A Spring Boot-based Retrieval-Augmented Generation (RAG) chatbot application using LangChain4j, OpenAI LLM, and PostgreSQL with pgvector for vector storage.
+A Spring Boot-based Retrieval-Augmented Generation (RAG) chatbot application using LangChain4j, Google Gemini LLM, and PostgreSQL with pgvector for vector storage.
 
 ## Prerequisites
 
 - **Java 21** or higher
 - **Maven 3.6+** (or use the included Maven wrapper)
 - **Docker and Docker Compose** (for PostgreSQL with pgvector)
-- **OpenAI API Key** (for LLM and embedding models)
-  - GPT-4.1 Mini model (`gpt-4.1-mini`) for chat
-  - Text Embedding 3 Large  model (`text-embedding-3-large`) for embeddings
+- **Google Gemini API Key** (for LLM and embedding models)
+  - Gemini 1.5 Pro model (`gemini-2.5-flash`) for chat
+  - Text Embedding 004 model (`text-embedding-004`) for embeddings
 
 ## Project Structure
 
@@ -20,7 +20,7 @@ A Spring Boot-based Retrieval-Augmented Generation (RAG) chatbot application usi
 │   ├── controller/ChatController.java       # REST API endpoints (chat, files, vector store)
 │   ├── handler/StreamChatHandler.java       # Handles streaming chat responses
 │   ├── service/
-│   │   ├── AiService.java                   # OpenAI integration (chat + embeddings)
+│   │   ├── AiService.java                   # Gemini integration (chat + embeddings)
 │   │   └── VectorStoreService.java          # PostgreSQL pgvector store operations
 │   ├── prompttemplate/RagPromptTemplate.java # RAG prompt templates
 │   ├── textsplitter/SimpleTextSplitter.java # Document chunking utilities
@@ -82,26 +82,26 @@ SELECT * FROM pg_indexes WHERE indexname = 'your_index_name';
 \d your_index_name
 ```
 
-### 2. Set up OpenAI API Key
+### 2. Set up Google Gemini API Key
 
-Configure your OpenAI API key as an environment variable:
+Configure your Google Gemini API key as an environment variable:
 
 **Windows (PowerShell):**
 
 ```powershell
-$env:OPENAI_API_KEY="your-api-key-here"
+$env:GEMINI_API_KEY="your-api-key-here"
 ```
 
 **Windows (Command Prompt):**
 
 ```batch
-set OPENAI_API_KEY=your-api-key-here
+set GEMINI_API_KEY=your-api-key-here
 ```
 
 **Linux/macOS:**
 
 ```bash
-export OPENAI_API_KEY="your-api-key-here"
+export GEMINI_API_KEY="your-api-key-here"
 ```
 
 Alternatively, you can update `application.properties` directly:
@@ -156,12 +156,12 @@ Once the application starts successfully, you can access:
 
 You can change the language model and embedding model by modifying the `app.ai.chat-model-name` and `app.ai.embedding-model-name` properties in the configuration file.
 
-**Available OpenAI models**:
+**Available Google Gemini models**:
 
-- **Chat Models**: Support all popular OpenAI model such as `gpt-4o`, `gpt-4.1-mini`, `gpt-5`,...
-- **Embedding Models**: `text-embedding-3-large`, `text-embedding-3-small`, `text-embedding-ada-002`
+- **Chat Models**: `gemini-2.0-flash`, `gemini-2.5-flash`, `gemini-1.5-flash`, etc.
+- **Embedding Models**: `text-embedding-004`, `text-embedding-003`
 
-Refer to the [OpenAI Models Documentation](https://platform.openai.com/docs/models) for the latest available models and their capabilities.
+Refer to the [Google Gemini Models Documentation](https://ai.google.dev/gemini-api/docs) for the latest available models and their capabilities.
 
 ## Technologies Used
 
@@ -171,8 +171,8 @@ Refer to the [OpenAI Models Documentation](https://platform.openai.com/docs/mode
 - **Spring WebFlux** - Reactive web stack for Server-Sent Events (SSE)
 - **LangChain4j 1.7.1** - Java framework for LLM integration and RAG
 - **PostgreSQL + pgvector** - Vector database for semantic search and document storage
-- **OpenAI GPT-4.1 Mini** - Chat model for conversational AI
-- **OpenAI Text Embedding 3 Large** - Embedding model for vector search
+- **Google Gemini 1.5 Pro** - Chat model for conversational AI
+- **Google Text Embedding 004** - Embedding model for vector search
 
 ### Frontend
 
@@ -186,7 +186,7 @@ Refer to the [OpenAI Models Documentation](https://platform.openai.com/docs/mode
 
 - **Docker & Docker Compose** - PostgreSQL with pgvector containerization
 - **Maven** - Dependency management and build automation
-- **OpenAI API** - Cloud-based LLM and embedding services
+- **Google Gemini API** - Cloud-based LLM and embedding services
 
 ## How RAG (Retrieval-Augmented Generation) Works
 
@@ -196,16 +196,16 @@ The application implements a sophisticated RAG pipeline:
 
 1. **Document Upload**: Users upload `.md` or `.txt` files through the web interface
 2. **Text Chunking**: Documents are split into manageable chunks with configurable overlap
-3. **Embeddings Generation**: Each chunk is converted to vector embeddings using OpenAI's `text-embedding-3-large` model
+3. **Embeddings Generation**: Each chunk is converted to vector embeddings using Google Gemini's `text-embedding-004` model
 4. **Vector Storage**: Embeddings are stored in PostgreSQL with pgvector extension and metadata (source file, chunk index)
 
 ### Query Processing Pipeline
 
 1. **User Query**: User submits a question via the chat interface
-2. **Query Embedding**: The question is converted to a vector embedding using OpenAI's embedding model
+2. **Query Embedding**: The question is converted to a vector embedding using Google Gemini's embedding model
 3. **Similarity Search**: PostgreSQL with pgvector finds the most relevant document chunks (configurable similarity threshold)
 4. **Context Injection**: Relevant chunks are injected into the prompt template
-5. **AI Response**: OpenAI GPT-4.1 Mini generates a response using both the question and retrieved context
+5. **AI Response**: Google Gemini 1.5 Pro generates a response using both the question and retrieved context
 6. **Streaming Output**: Response is streamed back to the user in real-time via Server-Sent Events
 
 ### Prompt Template System

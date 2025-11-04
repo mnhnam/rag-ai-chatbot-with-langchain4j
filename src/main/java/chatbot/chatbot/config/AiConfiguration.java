@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import dev.langchain4j.model.openai.OpenAiEmbeddingModel;
-import dev.langchain4j.model.openai.OpenAiStreamingChatModel;
+import dev.langchain4j.model.googleai.GoogleAiEmbeddingModel;
+import dev.langchain4j.model.googleai.GoogleAiGeminiStreamingChatModel;
 import dev.langchain4j.store.embedding.pgvector.PgVectorEmbeddingStore;
 
 @Configuration
@@ -19,9 +19,6 @@ public class AiConfiguration {
     
     @Value("${app.ai.embedding-model-name}")
     private String embeddingModelName;
-
-    @Value("#{new Integer(${app.ai.embedding-dimension})}")
-    private Integer dimension;
 
     @Value("${app.ai.api-key}")
     private String apiKey; 
@@ -51,24 +48,23 @@ public class AiConfiguration {
     private String rawDataDir;
 
     @Bean
-    public OpenAiStreamingChatModel chatModel() {
-        return OpenAiStreamingChatModel.builder()
+    public GoogleAiGeminiStreamingChatModel chatModel() {
+        return GoogleAiGeminiStreamingChatModel.builder()
             .modelName(chatModelName)
             .apiKey(apiKey)
             .build();
     }
 
     @Bean
-    public OpenAiEmbeddingModel embeddingModel() {
-        return OpenAiEmbeddingModel.builder()
+    public GoogleAiEmbeddingModel embeddingModel() {
+        return GoogleAiEmbeddingModel.builder()
             .modelName(embeddingModelName)
-            .dimensions(dimension)
             .apiKey(apiKey)
             .build();
     }
 
     @Bean
-    public PgVectorEmbeddingStore embeddingStore(OpenAiEmbeddingModel embeddingModel) {
+    public PgVectorEmbeddingStore embeddingStore(GoogleAiEmbeddingModel embeddingModel) {
         return PgVectorEmbeddingStore.builder()
             .host(dbHost)
             .port(dbPort)
@@ -77,7 +73,7 @@ public class AiConfiguration {
             .database(dbName)
             .createTable(true)
             .table(tableName)
-            .dimension(dimension)
+            .dimension(embeddingModel.dimension())
             .build();
     }
 }
